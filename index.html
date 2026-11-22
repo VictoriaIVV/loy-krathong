@@ -1,0 +1,384 @@
+<html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>คำเชิญพิเศษ: ไปลอยกระทงด้วยกันนะ 🌕✨</title>
+    <!-- โหลด Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- โหลดฟอนต์ภาษาไทยน่ารักๆ จาก Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&family=Mali:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: radial-gradient(circle at 50% 20%, #1e2952 0%, #0d1326 65%, #070a14 100%);
+            min-height: 100dvh;
+            overflow: hidden;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .font-cute { font-family: 'Mali', cursive, sans-serif; }
+        .moon-glow {
+            box-shadow: 0 0 50px 15px rgba(253, 224, 71, 0.35);
+            animation: moonPulse 4s ease-in-out infinite alternate;
+        }
+        @keyframes moonPulse {
+            0% { transform: scale(1); opacity: 0.92; }
+            100% { transform: scale(1.05); opacity: 1; }
+        }
+        .krathong-float { animation: floatWater 3.5s ease-in-out infinite; }
+        @keyframes floatWater {
+            0%, 100% { transform: translateY(0px) rotate(-2deg); }
+            50% { transform: translateY(-9px) rotate(2deg); }
+        }
+        .candle-flame {
+            transform-origin: bottom center;
+            animation: flicker 0.8s ease-in-out infinite alternate;
+        }
+        @keyframes flicker {
+            0% { transform: scale(1) rotate(-3deg); }
+            100% { transform: scale(1.12) rotate(3deg); }
+        }
+        #noBtn {
+            transition: left 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), top 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.2s ease;
+            touch-action: none;
+        }
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle var(--d) ease-in-out infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.25); }
+        }
+    </style>
+</head>
+<body class="h-[100dvh] w-screen relative flex flex-col items-center justify-center text-white overflow-hidden">
+    <div id="starfield" class="fixed inset-0 pointer-events-none z-0"></div>
+
+    <!-- พระจันทร์ -->
+    <div class="fixed top-6 right-6 sm:top-12 sm:right-16 w-20 h-20 sm:w-28 sm:h-28 rounded-full bg-gradient-to-tr from-amber-200 via-yellow-100 to-white moon-glow pointer-events-none z-0"></div>
+
+    <!-- โคมลอย -->
+    <div class="fixed top-14 left-6 sm:left-16 opacity-60 pointer-events-none animate-bounce" style="animation-duration: 5s;">
+        <div class="w-6 h-8 bg-gradient-to-b from-orange-400 to-amber-200 rounded-t-full rounded-b-lg shadow-[0_0_20px_rgba(251,146,60,0.8)]"></div>
+    </div>
+
+    <canvas id="fireworksCanvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
+
+    <!-- หน้าจอที่ 1: คำเชิญ -->
+    <main id="inviteScreen" class="relative z-20 w-full max-w-lg px-4 flex flex-col items-center text-center">
+        <div class="mb-2 px-4 py-1 rounded-full bg-pink-500/20 border border-pink-400/40 text-pink-200 text-xs sm:text-base font-cute animate-bounce">
+            ถึง: <span id="displayFriendName" class="font-bold text-amber-300">เพื่อนรัก</span> 💌
+        </div>
+
+        <h1 class="font-cute text-2xl sm:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-300 to-pink-300 leading-tight mb-2">
+            วันที่ 24 นี้ไปลอยกระทง<br>ด้วยกันนะ 🌕✨
+        </h1>
+
+        <p class="text-slate-300 text-xs sm:text-base mb-2 max-w-md">
+            กระทงยังไม่มีคู่... แต่ถ้าเธอไปด้วยกัน รับรองไม่เหงาแน่นอน! กดเลือกคำตอบด้านล่างได้เลย 👇
+        </p>
+
+        <!-- กระทง SVG -->
+        <div class="relative w-36 h-32 sm:w-56 sm:h-48 my-1 flex items-center justify-center krathong-float">
+            <svg viewBox="0 0 240 200" class="w-full h-full drop-shadow-2xl">
+                <line x1="112" y1="95" x2="108" y2="55" stroke="#d97706" stroke-width="2.5"/>
+                <line x1="120" y1="95" x2="120" y2="50" stroke="#d97706" stroke-width="2.5"/>
+                <line x1="128" y1="95" x2="132" y2="55" stroke="#d97706" stroke-width="2.5"/>
+                <rect x="115" y="65" width="10" height="35" rx="3" fill="#fde047"/>
+                <g class="candle-flame">
+                    <path d="M120 43 C126 53, 125 62, 120 64 C115 62, 114 53, 120 43 Z" fill="#f97316"/>
+                    <path d="M120 49 C123 55, 123 61, 120 62 C117 61, 117 55, 120 49 Z" fill="#fef08a"/>
+                </g>
+                <circle cx="95" cy="105" r="12" fill="#f472b6"/><circle cx="95" cy="105" r="5" fill="#fef08a"/>
+                <circle cx="145" cy="105" r="12" fill="#fb7185"/><circle cx="145" cy="105" r="5" fill="#fef08a"/>
+                <circle cx="120" cy="102" r="13" fill="#c084fc"/><circle cx="120" cy="102" r="5" fill="#fde047"/>
+                <path d="M60 120 L75 90 L90 120 Z" fill="#22c55e"/>
+                <path d="M85 120 L102 88 L118 120 Z" fill="#16a34a"/>
+                <path d="M122 120 L138 88 L155 120 Z" fill="#16a34a"/>
+                <path d="M150 120 L165 90 L180 120 Z" fill="#22c55e"/>
+                <path d="M42 128 Q120 142 198 128 L184 156 Q120 168 56 156 Z" fill="#15803d"/>
+                <ellipse cx="120" cy="164" rx="85" ry="8" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.6"/>
+            </svg>
+        </div>
+
+        <!-- ปุ่มกด -->
+        <div class="mt-3 flex flex-col sm:flex-row items-center justify-center gap-3 w-full min-h-[105px] relative">
+            <button id="yesBtn" type="button" class="z-30 bg-gradient-to-r from-emerald-400 via-green-500 to-teal-500 text-slate-950 font-cute font-bold text-base sm:text-xl px-6 py-3 rounded-2xl shadow-[0_0_25px_rgba(52,211,153,0.6)] border-2 border-emerald-200 transition-all duration-300 active:scale-95 cursor-pointer">
+                ไปสิ! รออยู่เลย 🛶💖
+            </button>
+            <button id="noBtn" type="button" class="z-30 bg-gradient-to-r from-rose-500 to-red-600 text-white font-cute font-semibold text-sm sm:text-lg px-5 py-2.5 rounded-2xl shadow-lg border border-rose-300/50 cursor-pointer whitespace-nowrap">
+                ไม่ไป / ไม่ว่าง 😢
+            </button>
+        </div>
+
+        <p id="teaseCounterText" class="mt-3 text-xs sm:text-sm text-amber-300/90 h-5 font-cute px-2"></p>
+    </main>
+
+    <!-- หน้าจอที่ 2: หน้าฉลองและตั๋วนัดหมาย -->
+    <section id="celebrationScreen" class="hidden relative z-30 w-full max-w-md px-4 flex-col items-center text-center max-h-[92dvh] overflow-y-auto">
+        <div class="mb-2 inline-block px-4 py-1 rounded-full bg-amber-400/20 border border-amber-300 text-amber-200 text-xs sm:text-sm font-cute">
+            ✨ ดีลสำเร็จ 100% ✨
+        </div>
+
+        <h2 class="font-cute text-2xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-amber-300 to-pink-300 mb-3">
+            เย้! ตกลงแล้วนะ<br>ห้ามเบี้ยวเด็ดขาด! 🎉
+        </h2>
+
+        <div class="w-full bg-gradient-to-br from-[#192347] via-[#131b38] to-[#231942] border-2 border-amber-300/70 rounded-3xl p-4 sm:p-6 shadow-[0_0_40px_rgba(251,191,36,0.25)] text-left">
+            <div class="flex items-center justify-between border-b border-dashed border-amber-300/30 pb-3 mb-3">
+                <div>
+                    <span class="text-[10px] uppercase tracking-widest text-amber-400 font-semibold">LOY KRATHONG VIP PASS</span>
+                    <h3 class="font-cute text-lg sm:text-xl font-bold text-white">ตั๋วนัดลอยกระทงคู่หู 🌕</h3>
+                </div>
+                <span class="text-2xl sm:text-3xl">🪷</span>
+            </div>
+
+            <div class="space-y-2.5 text-xs sm:text-base">
+                <div class="flex justify-between"><span class="text-slate-400">ผู้ร่วมทริป:</span><span id="ticketFriendName" class="font-bold text-pink-300 font-cute">เพื่อนรัก (และคนชวนสุดน่ารัก)</span></div>
+                <div class="flex justify-between"><span class="text-slate-400">สถานที่นัด:</span><span id="ticketLocation" class="font-semibold text-amber-200">บึงพลาญชัย</span></div>
+                <div class="flex justify-between"><span class="text-slate-400">วันและเวลา:</span><span id="ticketTime" class="font-semibold text-emerald-300">วันที่ 24 นี้ 16:00-20:00 น.</span></div>
+                <div class="flex justify-between items-center"><span class="text-slate-400">สถานะ:</span><span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-400/40">ยืนยันแล้ว ห้ามยกเลิก!</span></div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-dashed border-amber-300/30 text-center text-xs text-slate-300 font-cute">
+                "แคปหน้าจอนี้ส่งกลับมาเป็นหลักฐานด้วยนะ 📸✨"
+            </div>
+        </div>
+
+        <div class="mt-4 flex flex-wrap items-center justify-center gap-2.5 w-full">
+            <button id="downloadTicketBtn" type="button" class="flex-1 min-w-[140px] bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 font-cute font-bold py-2.5 px-4 rounded-2xl shadow-lg active:scale-95 transition text-sm">
+                📸 บันทึกรูปตั๋ว
+            </button>
+            <button id="replayFireworksBtn" type="button" class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-cute py-2.5 px-4 rounded-2xl active:scale-95 transition text-sm">
+                🎆 จุดพลุอีก!
+            </button>
+        </div>
+
+        <button id="resetBtn" type="button" class="mt-3 text-xs text-slate-400 hover:text-white underline py-1">
+            กลับไปหน้าแรก
+        </button>
+    </section>
+
+    <div class="fixed bottom-0 left-0 right-0 h-14 sm:h-20 bg-gradient-to-b from-cyan-700/25 to-cyan-950/70 backdrop-blur-sm z-10 pointer-events-none border-t border-cyan-400/20"></div>
+
+    <div id="toastMessage" class="fixed top-5 left-1/2 -translate-x-1/2 z-[60] bg-emerald-500 text-slate-950 font-cute font-bold px-5 py-2.5 rounded-full shadow-xl opacity-0 pointer-events-none transition-all duration-300 -translate-y-4 text-xs sm:text-sm whitespace-nowrap">
+        เรียบร้อยแล้ว!
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // สร้างดาวพื้นหลัง
+            const starfield = document.getElementById('starfield');
+            for (let i = 0; i < 55; i++) {
+                const s = document.createElement('div');
+                s.className = 'star';
+                const sz = Math.random() * 2.5 + 1;
+                s.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*75}%;--d:${Math.random()*3+2}s`;
+                starfield.appendChild(s);
+            }
+
+            const inviteData = {
+                name: 'เพื่อนรัก',
+                loc: 'บึงพลาญชัย',
+                time: 'วันที่ 24 นี้ 16:00-20:00 น.'
+            };
+
+            document.getElementById('displayFriendName').textContent = inviteData.name;
+            document.getElementById('ticketFriendName').textContent = `${inviteData.name} (และคนชวนสุดน่ารัก)`;
+            document.getElementById('ticketLocation').textContent = inviteData.loc;
+            document.getElementById('ticketTime').textContent = inviteData.time;
+
+            const showToast = (msg) => {
+                const t = document.getElementById('toastMessage');
+                t.textContent = msg;
+                t.classList.remove('opacity-0', '-translate-y-4');
+                t.classList.add('opacity-100', 'translate-y-0');
+                setTimeout(() => {
+                    t.classList.remove('opacity-100', 'translate-y-0');
+                    t.classList.add('opacity-0', '-translate-y-4');
+                }, 2500);
+            };
+
+            // ปุ่มปฏิเสธวิ่งหนี
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            const teaseText = document.getElementById('teaseCounterText');
+            let dodgeCount = 0;
+            let yesScale = 1;
+
+            const phrases = [
+                'แน่ใจเหรอ? 🥺', 'คิดดูอีกทีนะ!', 'กดไม่โดนหรอก แบร่! 😜',
+                'ปุ่มนี้เสีย กดไม่ได้!', 'ไปเถอะ นะนะนะ 🙏', 'ไม่ให้ปฏิเสธโว้ย!',
+                'หนีไม่พ้นหรอก 💨', 'ยอมแพ้แล้วกดสีเขียวเถอะ!', 'บังคับไป! จบนะ 😆'
+            ];
+
+            function dodgeNoButton(e) {
+                if (e) { e.preventDefault(); e.stopPropagation(); }
+                dodgeCount++;
+                noBtn.textContent = phrases[(dodgeCount - 1) % phrases.length];
+
+                const isMobile = window.innerWidth < 640;
+                yesScale += isMobile ? 0.14 : 0.22;
+                yesBtn.style.transform = `scale(${Math.min(yesScale, isMobile ? 2.1 : 3.5)})`;
+
+                if (noBtn.style.position !== 'fixed') noBtn.style.position = 'fixed';
+
+                const padX = 16, topPad = 75, botPad = 90;
+                const bw = noBtn.offsetWidth || 135;
+                const bh = noBtn.offsetHeight || 44;
+                const vw = document.documentElement.clientWidth || window.innerWidth;
+                const vh = document.documentElement.clientHeight || window.innerHeight;
+
+                const maxX = Math.max(padX, vw - bw - padX);
+                const maxY = Math.max(topPad, vh - bh - botPad);
+
+                let rx = Math.floor(Math.random() * (maxX - padX + 1)) + padX;
+                let ry = Math.floor(Math.random() * (maxY - topPad + 1)) + topPad;
+
+                const yr = yesBtn.getBoundingClientRect();
+                if (rx < yr.right + 10 && rx + bw > yr.left - 10 && ry < yr.bottom + 10 && ry + bh > yr.top - 10) {
+                    ry = yr.top > vh / 2 ? topPad : maxY;
+                }
+
+                noBtn.style.left = `${rx}px`;
+                noBtn.style.top = `${ry}px`;
+                noBtn.style.zIndex = '45';
+
+                teaseText.textContent = dodgeCount === 1
+                    ? 'อ๊ะ! ปุ่มปฏิเสธลื่นเฉยเลย กดสีเขียวดีกว่านะ 😉'
+                    : `พยายามกดปฏิเสธไปแล้ว ${dodgeCount} ครั้ง... ยอมไปเถอะ! 😂`;
+            }
+
+            noBtn.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') dodgeNoButton(e); });
+            noBtn.addEventListener('touchstart', dodgeNoButton, { passive: false });
+            noBtn.addEventListener('click', dodgeNoButton);
+
+            // เสียงฉลอง
+            function playSuccessSound() {
+                try {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    const ctx = new AudioCtx();
+                    [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.1);
+                        gain.gain.setValueAtTime(0.15, ctx.currentTime + i * 0.1);
+                        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.1 + 0.4);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(ctx.currentTime + i * 0.1);
+                        osc.stop(ctx.currentTime + i * 0.1 + 0.4);
+                    });
+                } catch (_) {}
+            }
+
+            // พลุฉลอง
+            const canvas = document.getElementById('fireworksCanvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [], active = false;
+
+            const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+            window.addEventListener('resize', resize);
+            resize();
+
+            class Particle {
+                constructor(x, y, color) {
+                    this.x = x; this.y = y; this.color = color;
+                    const a = Math.random() * Math.PI * 2;
+                    const sp = Math.random() * 5 + 2;
+                    this.vx = Math.cos(a) * sp; this.vy = Math.sin(a) * sp;
+                    this.alpha = 1; this.decay = Math.random() * 0.02 + 0.015;
+                }
+                update() { this.vx *= 0.96; this.vy = this.vy * 0.96 + 0.06; this.x += this.vx; this.y += this.vy; this.alpha -= this.decay; }
+                draw() {
+                    ctx.save(); ctx.globalAlpha = Math.max(0, this.alpha); ctx.fillStyle = this.color;
+                    ctx.beginPath(); ctx.arc(this.x, this.y, 3, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+                }
+            }
+
+            function loopFireworks() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    particles[i].update();
+                    particles[i].draw();
+                    if (particles[i].alpha <= 0) particles.splice(i, 1);
+                }
+                if (active || particles.length > 0) requestAnimationFrame(loopFireworks);
+            }
+
+            function triggerFireworks() {
+                active = true;
+                loopFireworks();
+                const colors = ['#fde047', '#f472b6', '#34d399', '#38bdf8', '#fb923c', '#c084fc'];
+                let n = 0;
+                const timer = setInterval(() => {
+                    const x = Math.random() * canvas.width * 0.8 + canvas.width * 0.1;
+                    const y = Math.random() * canvas.height * 0.5 + canvas.height * 0.1;
+                    const c = colors[Math.floor(Math.random() * colors.length)];
+                    for (let i = 0; i < 40; i++) particles.push(new Particle(x, y, c));
+                    if (++n >= 7) { clearInterval(timer); active = false; }
+                }, 350);
+            }
+
+            const inviteScreen = document.getElementById('inviteScreen');
+            const celebrationScreen = document.getElementById('celebrationScreen');
+
+            yesBtn.addEventListener('click', () => {
+                playSuccessSound();
+                noBtn.style.display = 'none';
+                inviteScreen.classList.add('hidden');
+                celebrationScreen.classList.remove('hidden');
+                celebrationScreen.classList.add('flex');
+                triggerFireworks();
+            });
+
+            document.getElementById('replayFireworksBtn').addEventListener('click', () => {
+                playSuccessSound();
+                triggerFireworks();
+            });
+
+            document.getElementById('resetBtn').addEventListener('click', () => {
+                dodgeCount = 0; yesScale = 1; yesBtn.style.transform = 'scale(1)';
+                noBtn.style.display = 'inline-block'; noBtn.style.position = 'static';
+                noBtn.textContent = 'ไม่ไป / ไม่ว่าง 😢'; teaseText.textContent = '';
+                celebrationScreen.classList.add('hidden'); celebrationScreen.classList.remove('flex');
+                inviteScreen.classList.remove('hidden');
+            });
+
+            // บันทึกรูปตั๋ว PNG
+            document.getElementById('downloadTicketBtn').addEventListener('click', () => {
+                const tc = document.createElement('canvas');
+                tc.width = 600; tc.height = 360;
+                const tCtx = tc.getContext('2d');
+                const g = tCtx.createLinearGradient(0, 0, 600, 360);
+                g.addColorStop(0, '#192347'); g.addColorStop(1, '#231942');
+                tCtx.fillStyle = g; tCtx.fillRect(0, 0, 600, 360);
+                tCtx.strokeStyle = '#fcd34d'; tCtx.lineWidth = 6; tCtx.strokeRect(16, 16, 568, 328);
+                tCtx.fillStyle = '#fbbf24'; tCtx.font = 'bold 16px sans-serif'; tCtx.fillText('LOY KRATHONG VIP PASS', 40, 58);
+                tCtx.fillStyle = '#fff'; tCtx.font = 'bold 28px sans-serif'; tCtx.fillText('ตั๋วนัดลอยกระทงคู่หู 🌕🪷', 40, 95);
+                tCtx.fillStyle = '#cbd5e1'; tCtx.font = '20px sans-serif';
+                tCtx.fillText(`ผู้ร่วมทริป: ${inviteData.name}`, 40, 155);
+                tCtx.fillText(`สถานที่นัด: ${inviteData.loc}`, 40, 195);
+                tCtx.fillText(`วันและเวลา: ${inviteData.time}`, 40, 235);
+                tCtx.fillStyle = '#34d399'; tCtx.font = 'bold 20px sans-serif';
+                tCtx.fillText('สถานะ: ตกลงแล้ว ห้ามเบี้ยวเด็ดขาด! ✅', 40, 295);
+
+                const a = document.createElement('a');
+                a.download = `LoyKrathong_Ticket_${inviteData.name}.png`;
+                a.href = tc.toDataURL('image/png');
+                a.click();
+                showToast('บันทึกรูปตั๋วเรียบร้อย! ส่งให้เพื่อนดูเลย 📸');
+            });
+        });
+    </script>
+</body>
+</html>
